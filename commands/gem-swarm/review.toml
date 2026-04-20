@@ -1,0 +1,22 @@
+description = "Deep code review — logic, security, structure, performance audit"
+
+prompt = """Run a deep code review on the specified scope.
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["code-review", "delegation"].
+
+## Execution
+
+Delegate to `security_auditor` and `test_engineer` for specialized review.
+For frontend code, also delegate to `frontend_specialist`.
+
+1. Check code logic correctness and edge cases
+2. Audit security (injection, auth, data exposure)
+3. Review structure (SOLID, DRY, separation of concerns)
+4. Assess performance (N+1 queries, unnecessary renders, memory leaks)
+5. Verify test coverage adequacy
+
+Return findings categorized as Critical / Major / Minor / Suggestion."""

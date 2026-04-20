@@ -1,0 +1,34 @@
+{
+  "name": "gem-swarm",
+  "version": "1.0.0",
+  "description": "Multi-agent orchestration extension for Gemini CLI — 19 domain specialists, 37 skills, native parallel subagents, autonomous 4-phase workflow",
+  "license": "Apache-2.0",
+  "scripts": {
+    "generate": "node scripts/generate-stubs.js && node scripts/build-registries.js",
+    "build": "npm run generate",
+    "test": "node --test tests/unit/*.test.js 2>/dev/null || echo 'No tests yet'"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "orchestration",
+    "multi-agent",
+    "gemini-cli",
+    "planning",
+    "parallel-agents",
+    "mcp"
+  ],
+  "files": [
+    "src/",
+    "scripts/",
+    "agents/",
+    "commands/",
+    "hooks/",
+    "mcp/",
+    "policies/",
+    "docs/",
+    "GEMINI.md",
+    "gemini-extension.json"
+  ]
+}

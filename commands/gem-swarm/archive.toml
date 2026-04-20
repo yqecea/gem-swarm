@@ -1,0 +1,7 @@
+description = "Archive the active gem-swarm session and move state to archive"
+
+prompt = """Archive the active gem-swarm session.
+
+Call `get_session_status` to check for an active session.
+If one exists, call `archive_session` with the session_id.
+Report what was archived."""

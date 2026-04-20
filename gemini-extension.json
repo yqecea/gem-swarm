@@ -1,0 +1,55 @@
+{
+  "name": "gem-swarm",
+  "version": "1.0.0",
+  "description": "Multi-agent orchestration — 19 domain specialists, 37 skills, native parallel subagents, persistent sessions, autonomous 4-phase workflow",
+  "contextFileName": "GEMINI.md",
+  "settings": [
+    {
+      "name": "Disabled Agents",
+      "description": "Comma-separated list of agent names to exclude from planning.",
+      "envVar": "GEM_SWARM_DISABLED_AGENTS"
+    },
+    {
+      "name": "Max Retries",
+      "description": "Maximum retry attempts per phase before escalating to user.",
+      "envVar": "GEM_SWARM_MAX_RETRIES"
+    },
+    {
+      "name": "Auto Archive",
+      "description": "Automatically archive session state on successful completion (true/false).",
+      "envVar": "GEM_SWARM_AUTO_ARCHIVE"
+    },
+    {
+      "name": "Validation",
+      "description": "Post-phase validation strictness level (strict/normal/lenient).",
+      "envVar": "GEM_SWARM_VALIDATION_STRICTNESS"
+    },
+    {
+      "name": "State Directory",
+      "description": "Base directory for session state and plans (default: docs/gem-swarm).",
+      "envVar": "GEM_SWARM_STATE_DIR"
+    },
+    {
+      "name": "Max Concurrent",
+      "description": "Maximum subagents in one native parallel batch (0 = full batch).",
+      "envVar": "GEM_SWARM_MAX_CONCURRENT"
+    },
+    {
+      "name": "Execution Mode",
+      "description": "Execution mode: 'parallel', 'sequential', or 'ask'. Default: ask.",
+      "envVar": "GEM_SWARM_EXECUTION_MODE"
+    }
+  ],
+  "mcpServers": {
+    "gem-swarm": {
+      "command": "node",
+      "args": [
+        "${extensionPath}/mcp/gem-swarm-server.js"
+      ],
+      "cwd": "${extensionPath}",
+      "env": {
+        "GEM_SWARM_WORKSPACE_PATH": "${workspacePath}"
+      }
+    }
+  }
+}

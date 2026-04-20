@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# AG-Kit workspace overlay (development only, not part of the extension)
+.agent/
+
+# Runtime state (generated per-workspace, not committed)
+docs/gem-swarm/state/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+.idea/
+.vscode/

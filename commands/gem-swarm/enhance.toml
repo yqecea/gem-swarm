@@ -1,0 +1,12 @@
+description = "Add or update features in existing application"
+
+prompt = """Enhance the existing application with the following changes:
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["orchestration-steps"].
+
+Follow the orchestration workflow, but skip greenfield design questions.
+Focus on understanding existing codebase patterns before making changes."""

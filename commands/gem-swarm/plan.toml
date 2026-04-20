@@ -1,0 +1,20 @@
+description = "Plan a project or feature — analysis, breakdown, dependencies, no code"
+
+prompt = """Create a project plan for the following task. Do NOT write any code.
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["implementation-planning", "implementation-plan", "architecture"].
+
+## Execution
+
+1. Analyze requirements and constraints
+2. Break down into phases with clear deliverables
+3. Identify agent assignments for each phase
+4. Map dependencies between phases
+5. Estimate complexity per phase
+6. Write the plan to the state directory
+
+Present the plan for user approval before any execution."""

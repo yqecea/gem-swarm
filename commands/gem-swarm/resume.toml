@@ -1,0 +1,21 @@
+description = "Resume an interrupted gem-swarm session from the last checkpoint"
+
+prompt = """Resume the gem-swarm orchestration session.
+
+<user-request>
+{{args}}
+</user-request>
+
+## Runtime: Gemini CLI
+
+| Action | How |
+|--------|-----|
+| Load skill | `get_skill_content(resources: ["<name>"])` |
+| Delegate to agent | Call agent tool by name: `frontend_specialist(query: "...")`, `test_engineer(query: "...")` |
+| MCP tools | `mcp_gem-swarm_<tool_name>` |
+
+## Execute
+
+Call `get_skill_content` with resources: ["session-management", "execution", "delegation", "validation"].
+
+Read the active session state, summarize completed and pending phases, then resume from the first pending or failed phase following the loaded methodology."""

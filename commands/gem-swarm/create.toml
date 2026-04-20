@@ -1,0 +1,17 @@
+description = "Create a new application from natural language description"
+
+prompt = """Create a new application based on the following description:
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["orchestration-steps"].
+
+Follow the full orchestration workflow. During the Design phase, determine:
+1. Project type (web, mobile, backend, game, fullstack)
+2. Optimal tech stack based on requirements
+3. Architecture and file structure
+4. Agent assignments for implementation
+
+Then proceed through Planning → Execution → Code Review."""

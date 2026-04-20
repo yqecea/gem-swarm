@@ -1,0 +1,22 @@
+description = "Generate and run tests for the specified scope"
+
+prompt = """Generate and run tests for the following scope:
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["delegation"].
+
+## Execution
+
+Delegate to `test_engineer(query: "...")` with the full scope.
+
+The agent will:
+1. Analyze existing test coverage
+2. Identify untested paths and edge cases
+3. Write unit tests following AAA pattern (Arrange-Act-Assert)
+4. Write integration tests for cross-module flows
+5. Run all tests and report results
+
+For web applications, also delegate to `qa_automation_engineer` for E2E tests."""

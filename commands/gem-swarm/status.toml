@@ -1,0 +1,19 @@
+description = "Summarize the active gem-swarm session without mutating state"
+
+prompt = """Summarize the active gem-swarm session without mutating state.
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["architecture", "session-management"].
+
+## Execution
+
+1. Read the active session using MCP state tools
+2. Report session ID, creation timestamp, workflow mode, and overall status
+3. Show phase breakdown: completed, active, pending, and failed phases
+4. Report file manifest and token usage by agent
+
+- This is read-only; do not mutate state, archive sessions, or continue execution
+- If no active session exists, say so plainly"""

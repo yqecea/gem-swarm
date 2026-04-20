@@ -1,0 +1,22 @@
+description = "Security audit — OWASP 2025, supply chain, attack surface analysis"
+
+prompt = """Run a security audit on the specified scope.
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["delegation"].
+
+## Execution
+
+Delegate to `security_auditor(query: "...")` with the full scope.
+
+The agent will:
+1. Map the attack surface (endpoints, inputs, auth boundaries)
+2. Check OWASP Top 10 2025 vulnerabilities
+3. Audit dependency supply chain (known CVEs, unmaintained packages)
+4. Review secrets management and data exposure
+5. Assess auth/authz implementation
+
+Return findings with severity, CVSS estimate, and remediation guidance."""

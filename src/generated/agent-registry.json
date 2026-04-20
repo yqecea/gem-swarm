@@ -1,0 +1,280 @@
+[
+  {
+    "name": "backend-specialist",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "code-archaeologist",
+    "capabilities": "read_only",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "database-architect",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "debugger",
+    "capabilities": "read_only",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "devops-engineer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user",
+      "google_web_search"
+    ]
+  },
+  {
+    "name": "documentation-writer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "explorer-agent",
+    "capabilities": "read_shell",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "list_directory",
+      "ask_user",
+      "google_web_search"
+    ]
+  },
+  {
+    "name": "frontend-specialist",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "game-developer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "write_file",
+      "replace",
+      "run_shell_command",
+      "grep_search",
+      "glob",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "mobile-developer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "penetration-tester",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user",
+      "google_web_search"
+    ]
+  },
+  {
+    "name": "performance-optimizer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user",
+      "google_web_search"
+    ]
+  },
+  {
+    "name": "product-manager",
+    "capabilities": "read_shell",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "product-owner",
+    "capabilities": "read_shell",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "project-planner",
+    "capabilities": "read_shell",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "qa-automation-engineer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  },
+  {
+    "name": "security-auditor",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user",
+      "google_web_search"
+    ]
+  },
+  {
+    "name": "seo-specialist",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "write_file",
+      "list_directory",
+      "ask_user",
+      "google_web_search"
+    ]
+  },
+  {
+    "name": "test-engineer",
+    "capabilities": "full",
+    "tools": [
+      "read_file",
+      "read_many_files",
+      "grep_search",
+      "glob",
+      "run_shell_command",
+      "replace",
+      "write_file",
+      "list_directory",
+      "ask_user"
+    ]
+  }
+]

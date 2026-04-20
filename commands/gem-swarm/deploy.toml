@@ -1,0 +1,21 @@
+description = "Deploy to production — pre-flight checks and deployment execution"
+
+prompt = """Execute deployment workflow for:
+
+<user-request>
+{{args}}
+</user-request>
+
+Call `get_skill_content` with resources: ["delegation"].
+
+## Execution
+
+Delegate to `devops_engineer(query: "...")` with the full scope.
+
+Pre-flight checks:
+1. Run all tests
+2. Security scan
+3. Build verification
+4. Environment config validation
+
+Then execute deployment following the project's established procedure."""
