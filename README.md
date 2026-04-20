@@ -2,14 +2,14 @@
 
 Multi-agent orchestration extension for [Gemini CLI](https://github.com/anthropics/gemini-cli).
 
-19 domain-specialist agents, 55 skills, 12 commands, native parallel subagent dispatch, persistent session management, and an autonomous 4-phase workflow — all running as a single Gemini CLI extension.
+19 domain-specialist agents, 37 domain skills, 7 orchestration skills, 12 commands, native parallel subagent dispatch, persistent session management, and an autonomous 4-phase workflow — all running as a single Gemini CLI extension.
 
 ## What You Get
 
 | Component | Count | Description |
 |-----------|-------|-------------|
 | **Agents** | 19 | Domain specialists with deep methodology (frontend, backend, security, DevOps, DB, mobile, game dev, testing, docs, SEO, and more) |
-| **Skills** | 55 | Actionable knowledge packs covering clean code, API patterns, architecture, TDD, performance profiling, deployment procedures, vulnerability scanning, and more |
+| **Skills** | 37 domain + 7 orchestration | Actionable knowledge packs covering clean code, API patterns, architecture, TDD, performance profiling, deployment procedures, vulnerability scanning, and more |
 | **Commands** | 12 | Slash commands for orchestration, planning, debugging, deployment, code review, security audit, and testing |
 | **MCP Tools** | 12 | Session state machine, plan validator, workspace initializer, settings resolver, agent/skill content provider |
 
