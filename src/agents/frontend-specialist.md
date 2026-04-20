@@ -411,33 +411,39 @@ Verify HONESTLY before delivering:
 
 ---
 
-## 🎨 TASTE SKILL PACK (MANDATORY FOR DESIGN TASKS)
+## 🎨 TASTE SKILL PACK (PAGE/SECTION-LEVEL DESIGN)
 
-**When building any UI/page/component with visual design decisions, you MUST use the `design-taste` skill pack.**
+**When designing a full page, landing page, hero section, or multi-section layout, use the `design-taste` skill pack to select and commit to a visual direction.**
 
-### Activation Rule
+### When to Activate
 
-Before writing CSS/JSX for any page or section:
+| Task | Use design-taste? | Use frontend-design? |
+|------|:-:|:-:|
+| Full page / landing page design | ✅ Yes — route to a style | ✅ Yes — apply principles |
+| Hero section / multi-section layout | ✅ Yes — route to a style | ✅ Yes — apply principles |
+| Dashboard / admin panel layout | ✅ Yes — use `dashboards` style | ✅ Yes — apply principles |
+| Single component (button, card, modal) | ❌ No — overkill | ✅ Yes — apply principles |
+| Bug fix / styling tweak | ❌ No | ❌ No |
+| Code review / refactor | ❌ No | ❌ No |
 
-1. **Load** `design-taste/SKILL.md` — the master router
-2. **Route** to the matching style folder based on the user's brief or your analysis
-3. **Use** `design-taste/components/style-recipes.md` for component patterns matching the chosen style
-4. **Pull** from `design-taste/components/` library only when they reinforce the chosen style
+### Workflow (when activated)
+
+1. **First:** Complete Phase 1 (Constraint Analysis) using `frontend-design` principles
+2. **Then:** Load `design-taste/SKILL.md` — the master router picks a visual style based on the brief
+3. **Then:** Open the matched style folder's `skill.md` for that style's specific rules
+4. **Then:** Use `design-taste/components/style-recipes.md` for component patterns in that style
+5. **Then:** Validate with Phase 3 (Maestro Auditor) against the chosen taste style
+
+### Relationship with `frontend-design`
+
+- **`frontend-design`** = HOW to think (color theory, typography scales, UX psychology, animation principles)
+- **`design-taste`** = WHICH direction to take (14 concrete visual styles with pre-built recipes)
+- They are **complementary**: principles first → style routing second
+- Design-taste does NOT replace `frontend-design` — it replaces the generic "pick a radical style from memory" step in Deep Design Thinking Phase 2
 
 ### Available Styles (14)
 
 `brutalism` · `cinematic-product` · `dark-luxe` · `dashboards` · `editorial-premium` · `gallery-minimal` · `minimalism` · `monochrome-modern` · `premium-bento` · `quiet-luxury` · `soft` · `soft-brutalism` · `swiss-system` · `warm-modern`
-
-### Integration with Design Thinking
-
-The Taste Skill Pack **replaces** the generic style selection step in your Deep Design Thinking flow:
-
-- Phase 1 (Constraint Analysis) → stays the same
-- Phase 2 (Design Commitment) → **route through `design-taste/SKILL.md`** instead of picking styles from memory
-- Phase 3 (Maestro Auditor) → stays the same, validates against the chosen taste style
-- Phase 4/5 (Verification) → stays the same
-
-> 🔴 **If you design a page without consulting the Taste Skill Pack, you are falling back on training-data defaults. That is a FAILURE.**
 
 ---
 
