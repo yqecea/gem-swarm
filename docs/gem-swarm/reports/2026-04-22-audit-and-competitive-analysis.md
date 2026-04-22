@@ -47,3 +47,14 @@ Based on the competitive analysis, the following strategic enhancements are reco
 
 5. **Develop a Self-Improvement Protocol:**
    - Utilize `AfterAgent` hooks to nudge agents towards better behaviors over time (a "learn" signal similar to `frieren` or `chanhee-kang`), enabling continuous refinement of the orchestration and implementation quality.
+
+## Hooks Gap Analysis (Updated)
+
+A detailed comparison with `richardcb/oh-my-gemini` reveals significant gaps in execution-level safety. While `gem-swarm` implements robust handoff validation (`AfterAgent`) and basic Git checkpoints (`BeforeTool`), it lacks the following critical hooks:
+
+- **after-tool (P0)**: No mechanism for automated verification (lint/test) immediately following tool execution.
+- **phase-gate (P0)**: Absence of logic gates for phase transitions, allowing the orchestrator to advance even if deliverables are missing or invalid.
+- **tool-filter (P1)**: Lack of a security layer to intercept and block dangerous or unauthorized tool calls.
+- **ralph-retry (P2)**: Limited retry logic that focuses on format rather than execution error recovery.
+
+Strategic priority should be given to `phase-gate` and `after-tool` to ensure workflow integrity and code quality.
