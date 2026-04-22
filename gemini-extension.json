@@ -38,6 +38,11 @@
       "name": "Execution Mode",
       "description": "Execution mode: 'parallel', 'sequential', or 'ask'. Default: ask.",
       "envVar": "GEM_SWARM_EXECUTION_MODE"
+    },
+    {
+      "name": "Git Checkpoints",
+      "description": "Auto-create git stash checkpoints before file modifications (true/false). Default: true.",
+      "envVar": "GEM_SWARM_GIT_CHECKPOINTS"
     }
   ],
   "mcpServers": {

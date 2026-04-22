@@ -1,4 +1,8 @@
 {
+  "before-tool": {
+    "module": "hooks/logic/before-tool-logic.js",
+    "fn": "handleBeforeTool"
+  },
   "after-agent": {
     "module": "hooks/logic/after-agent-logic.js",
     "fn": "handleAfterAgent"

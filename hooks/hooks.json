@@ -26,6 +26,20 @@
         ]
       }
     ],
+    "BeforeTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${extensionPath}/hooks/hook-runner.js\" gemini before-tool",
+            "name": "gem-swarm-git-checkpoint",
+            "description": "Create git stash checkpoint before file modifications",
+            "timeout": 15000
+          }
+        ]
+      }
+    ],
     "AfterAgent": [
       {
         "hooks": [

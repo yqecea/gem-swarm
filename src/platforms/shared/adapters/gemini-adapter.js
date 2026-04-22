@@ -18,6 +18,8 @@ function normalizeInput(raw) {
     agentInput: raw.prompt || '',
     agentResult: raw.prompt_response || '',
     stopHookActive: raw.stop_hook_active === true || raw.stop_hook_active === 'true',
+    toolName: raw.tool_name || '',
+    toolInput: raw.tool_input || {},
   };
 }
 
