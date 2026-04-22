@@ -1,7 +1,6 @@
 'use strict';
 
-const { execFileSync } = require('child_process');
-const { log } = require('../core/logger');
+const { execFileSync } = require('node:child_process');
 
 /**
  * Run a git command safely via execFileSync (no shell injection).
@@ -72,7 +71,7 @@ function createGitCheckpoint(message, cwd) {
   const storeResult = runGit(['stash', 'store', '-m', message, stashHash], cwd, 30000);
 
   if (storeResult.success) {
-    log('INFO', `Git checkpoint created: ${message}`);
+    process.stderr.write(`[gem-swarm] Git checkpoint created: ${message}\n`);
   }
 
   return storeResult.success;

@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Extension
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── 1. JSON Validation ──────────────────────────────────────
+      # Catch malformed JSON before anything else runs.
+      - name: Validate JSON manifests
+        run: |
+          echo "Checking gemini-extension.json..."
+          node -e "JSON.parse(require('fs').readFileSync('gemini-extension.json', 'utf8'))"
+
+          echo "Checking hook-registry.json..."
+          node -e "JSON.parse(require('fs').readFileSync('src/generated/hook-registry.json', 'utf8'))"
+
+          echo "Checking agent-registry.json..."
+          node -e "JSON.parse(require('fs').readFileSync('src/generated/agent-registry.json', 'utf8'))"
+
+          echo "Checking resource-registry.json..."
+          node -e "JSON.parse(require('fs').readFileSync('src/generated/resource-registry.json', 'utf8'))"
+
+          echo "✓ All JSON manifests valid"
+
+      # ── 2. Registry Build ───────────────────────────────────────
+      # Rebuild registries from source and verify they match committed versions.
+      - name: Build registries
+        run: |
+          node scripts/build-registries.js
+
+          if ! git diff --quiet src/generated/; then
+            echo "::error::Registries are out of date. Run 'npm run build' and commit."
+            git diff src/generated/
+            exit 1
+          fi
+
+          echo "✓ Registries up to date"
+
+      # ── 3. Layer Boundaries ─────────────────────────────────────
+      # src/lib/ must not depend on src/core/ or external packages.
+      - name: Check layer boundaries
+        run: node scripts/check-layer-boundaries.js
+
+      # ── 4. Hook Verification ────────────────────────────────────
+      # Verify hooks are embedded in gemini-extension.json (not separate file)
+      # and use the flat format that Gemini CLI actually reads.
+      - name: Verify hooks configuration
+        run: bash scripts/verify-hooks-loaded.sh
+
+      # ── 5. MCP Server Boot ──────────────────────────────────────
+      # Verify the MCP server module loads without import errors.
+      - name: Verify MCP server loads
+        run: |
+          node -e "
+            const s = require('./src/mcp/maestro-server');
+            if (typeof s.main !== 'function') {
+              console.error('MCP server missing main() export');
+              process.exit(1);
+            }
+            console.log('✓ MCP server module loads OK');
+          "
+
+      # ── 6. Context File ─────────────────────────────────────────
+      # Verify CONTEXT.md matches current codebase state.
+      - name: Verify context file
+        run: |
+          node scripts/generate-context.js
+          if ! git diff --quiet CONTEXT.md; then
+            echo "::warning::CONTEXT.md is outdated. Run 'node scripts/generate-context.js' and commit."
+          fi
+          echo "✓ Context file checked"
