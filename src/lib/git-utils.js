@@ -34,7 +34,7 @@ function isGitRepo(cwd) {
 }
 
 /**
- * Check if the working tree has uncommitted changes.
+ * Check if there are any changes (tracked or untracked).
  * @param {string} cwd - Working directory
  * @returns {boolean}
  */
@@ -44,16 +44,34 @@ function hasUncommittedChanges(cwd) {
 }
 
 /**
+ * Check if there are tracked (staged or modified) changes.
+ * Excludes untracked files (??) since git stash create ignores them.
+ * @param {string} cwd - Working directory
+ * @returns {boolean}
+ */
+function hasTrackedChanges(cwd) {
+  const result = runGit(['status', '--porcelain'], cwd);
+  if (!result.success) return false;
+  const lines = result.output.trim().split('\n').filter(Boolean);
+  return lines.some((line) => !line.startsWith('??'));
+}
+
+/**
  * Create a git stash checkpoint WITHOUT modifying the working tree.
+ *
+ * Strategy:
+ * - If tracked changes exist: `git stash create` works directly.
+ * - If only untracked files exist: temporarily stage them with
+ *   `git add -A`, run `git stash create`, then `git reset` to
+ *   restore the index. This is safe because stash create does not
+ *   touch the working directory.
  *
  * Uses `git stash create` (produces a stash commit object in memory)
  * followed by `git stash store` (records the ref in the stash list).
- * This pair never touches the working directory or index — it only
- * snapshots the current state for later recovery.
  *
  * Adapted from richardcb/oh-my-gemini hooks/lib/utils.js (MIT).
  *
- * @param {string} message - Stash message (e.g. "gem-swarm-checkpoint-2026-04-22T16-08-30-123Z")
+ * @param {string} message - Stash message
  * @param {string} cwd - Working directory
  * @returns {boolean} true if checkpoint was created
  */
@@ -62,7 +80,26 @@ function createGitCheckpoint(message, cwd) {
     return false;
   }
 
+  const onlyUntracked = !hasTrackedChanges(cwd);
+  let needsReset = false;
+
+  // git stash create ignores untracked files.
+  // Temporarily stage them so stash create can see them.
+  if (onlyUntracked) {
+    const addResult = runGit(['add', '-A'], cwd, 10000);
+    if (!addResult.success) {
+      return false;
+    }
+    needsReset = true;
+  }
+
   const createResult = runGit(['stash', 'create'], cwd, 30000);
+
+  // Always restore index if we staged untracked files
+  if (needsReset) {
+    runGit(['reset'], cwd, 10000);
+  }
+
   if (!createResult.success || !createResult.output.trim()) {
     return false;
   }
@@ -78,3 +115,4 @@ function createGitCheckpoint(message, cwd) {
 }
 
 module.exports = { isGitRepo, hasUncommittedChanges, createGitCheckpoint };
+
