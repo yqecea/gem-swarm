@@ -30,7 +30,7 @@ Before running orchestration commands:
 
 - Extension settings from `gemini-extension.json` are exposed as `GEM_SWARM_*` env vars; honor them as runtime source of truth.
 - Slash commands are loaded from `commands/gem-swarm/*.toml`; they resolve as `/gem-swarm:*`.
-- Hook entries must remain `type: "command"` in `hooks/hooks.json`.
+- Hook entries must remain `type: "command"` in `gemini-extension.json` under the `"hooks"` key. Hooks in separate files (e.g. `hooks/hooks.json`) are **ignored** by Gemini CLI.
 - The extension contributes deny/ask policy rules from `policies/maestro.toml`.
 
 ## Context Budget
@@ -177,11 +177,36 @@ All agent names use **snake_case** (underscores, not hyphens). When delegating, 
 
 ## Hooks
 
-gem-swarm uses Gemini CLI hooks from `hooks/hooks.json`:
+gem-swarm uses Gemini CLI hooks registered in `gemini-extension.json` (flat format):
 
 | Hook | Purpose |
 | --- | --- |
 | SessionStart | Prune stale sessions, initialize hook state |
 | BeforeAgent | Track active agent, inject session context |
+| BeforeTool | Git stash checkpoint on `write_file`/`replace` operations |
 | AfterAgent | Enforce handoff format (`Task Report` + `Downstream Context`) |
 | SessionEnd | Clean up hook state |
+
+## Development Workflow
+
+**Before ANY code change**, read `CONTEXT.md` — it is auto-generated from the codebase and contains the exact formats, integration points, and rules. Regenerate after changes: `node scripts/generate-context.js`.
+
+### Mandatory Pre-Commit Checks
+
+Run all 5 before committing:
+
+```bash
+node scripts/build-registries.js        # Rebuild agent + resource registries
+node scripts/check-layer-boundaries.js  # src/lib/ must not import src/core/
+bash scripts/verify-hooks-loaded.sh     # Hooks in correct file + format
+node -e "require('./src/mcp/maestro-server')"  # MCP server loads
+node scripts/generate-context.js        # Regenerate CONTEXT.md
+```
+
+### Integration Rules
+
+1. **Hooks**: Must be in `gemini-extension.json` → `"hooks"` key, flat format (`type`/`command`/`name` at top level). Never in `hooks/hooks.json`. Verify with `bash scripts/verify-hooks-loaded.sh`.
+2. **Layer boundaries**: `src/lib/` is pure — only `node:*` builtins and sibling `src/lib/` imports. No `src/core/`, no bare package names.
+3. **Registries**: After adding/modifying agents or skills, run `npm run build` and commit the regenerated `src/generated/*.json`.
+4. **MCP tools**: New handlers go in `src/mcp/handlers/<name>.js`, auto-discovered by `tool-registry.js`.
+5. **Testing**: Component tests are necessary but insufficient. Always verify runtime integration (does the CLI actually trigger it?).

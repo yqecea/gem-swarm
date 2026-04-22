@@ -1,6 +1,6 @@
 # gem-swarm Context
 
-> Auto-generated from codebase on 2026-04-22 16:57:49 UTC
+> Auto-generated from codebase on 2026-04-22 17:00:59 UTC
 > Regenerate: `node scripts/generate-context.js`
 
 ---
