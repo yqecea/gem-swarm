@@ -56,8 +56,8 @@ const TRIVIAL_PATTERNS = [
   /\b(?:change|update|set|modify|edit|switch|replace)\b.*\b(?:config|port|setting|env|variable|value|version|url|host|domain|path)\b/i,
   // Service lifecycle
   /\b(?:restart|reload|stop|start|bounce|reboot)\b.*\b(?:service|server|nginx|apache|pm2|docker|container|systemd|process|daemon)\b/i,
-  // Typo / rename
-  /\b(?:typo|rename|spelling|s\/.*\/.*\/)\b/i,
+  // Typo / rename / sed substitution
+  /\b(?:typo|rename|spelling)\b|s\/.*\/.*\//i,
   // Single dependency operations
   /\b(?:add|remove|install|uninstall|upgrade|downgrade)\b.*\b(?:import|dependency|package|library|module)\b/i,
   // Toggle / enable / disable
@@ -92,12 +92,26 @@ const COMPLEX_PATTERNS = [
   /\b(?:integrate|set up|configure)\b.*\b(?:auth|authentication|payment|database|ci\/cd|deployment|monitoring)\b/i,
 ];
 
+// Extensionless known filenames that should be detected as file targets
+const EXTENSIONLESS_FILES = new Set([
+  'Dockerfile', 'Makefile', 'Rakefile', 'Gemfile', 'Procfile',
+  'Vagrantfile', 'Jenkinsfile', 'Brewfile', 'Justfile',
+]);
+
 // File path detection in task text
-const FILE_PATH_REGEX = /(?:^|\s|['"`])([a-zA-Z0-9_./-]+\.[a-zA-Z]{1,10})(?:\s|$|['"`])/g;
+// Uses positive lookahead to avoid consuming trailing boundary (whitespace/quotes),
+// which would otherwise skip adjacent file paths in space-separated lists.
+const FILE_PATH_REGEX = /(?:^|\s|['"`])([a-zA-Z0-9_./-]+\.[a-zA-Z]{1,10})(?=\s|$|['"`])/g;
+
+// Extensionless file detection regex (built from EXTENSIONLESS_FILES set)
+const EXTENSIONLESS_REGEX = new RegExp(
+  '(?:^|\\s|[\'"`])(' + [...EXTENSIONLESS_FILES].join('|') + ')(?=\\s|$|[\'"`])',
+  'g'
+);
 
 // Security-critical file patterns (used by orchestrator for review gate)
 const SECURITY_CRITICAL_PATTERNS = [
-  /^\.env/i,
+  /(^|\/)\.env/i,
   /auth/i,
   /secret/i,
   /\.(key|pem|cert|crt)$/i,
@@ -127,6 +141,8 @@ function countPatternMatches(text, patterns) {
 function extractFileTargets(text) {
   const matches = [];
   let match;
+
+  // Extract files with extensions
   const regex = new RegExp(FILE_PATH_REGEX.source, FILE_PATH_REGEX.flags);
   while ((match = regex.exec(text)) !== null) {
     const candidate = match[1];
@@ -140,6 +156,13 @@ function extractFileTargets(text) {
       matches.push(candidate);
     }
   }
+
+  // Extract extensionless known files (Dockerfile, Makefile, etc.)
+  const extlessRegex = new RegExp(EXTENSIONLESS_REGEX.source, EXTENSIONLESS_REGEX.flags);
+  while ((match = extlessRegex.exec(text)) !== null) {
+    matches.push(match[1]);
+  }
+
   return [...new Set(matches)];
 }
 

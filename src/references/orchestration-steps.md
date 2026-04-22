@@ -3,7 +3,7 @@ STARTUP (Turn 1 — tool calls only, no text output)
  1. Call resolve_settings AND assess_task_complexity(task_description: <user-request text>) in PARALLEL.
     Both calls are independent — neither needs the other's output.
  2. Read the returned assess_task_complexity signals:
-    - If suggested_tier is "trivial" AND tier_confidence is "high" → Jump to Instant Path (step 41). SKIP steps 3-6.
+    - If suggested_tier is "trivial" AND tier_confidence is "high" → Jump to Instant Path (step 42). SKIP steps 3-6.
     - If suggested_tier is "trivial" AND tier_confidence is "medium" → Continue to step 3 (full startup) but carry the trivial hint forward for classification.
     - Otherwise → Continue to step 3.
  3. Call initialize_workspace(state_dir from resolve_settings) AND get_session_status in PARALLEL.
@@ -22,8 +22,8 @@ CLASSIFICATION (Turn 2)
     The task description determines scope. The repo size determines context.
     </HARD-GATE>
  8. Route:
-    - trivial → Instant Path (step 41)
-    - simple  → Express (step 31)
+    - trivial → Instant Path (step 42)
+    - simple  → Express (step 32)
     - medium/complex → continue to step 9
 
 DESIGN (Phase 1)
@@ -130,11 +130,11 @@ EXPRESS MODE GATE BYPASS: Express bypasses the execution-mode gate entirely. Exp
 
 EXPRESS MCP FALLBACK: If MCP state tools (create_session, transition_phase, archive_session) are unavailable, fall back to direct file writes on <state_dir>/state/active-session.md.
 
-31. Verify classification is simple. If task requires multiple phases or agents, override to medium → step 9.
+32. Verify classification is simple. If task requires multiple phases or agents, override to medium → step 9.
     <HARD-GATE>
     Express sessions MUST have exactly one implementation phase with exactly one agent.
     </HARD-GATE>
-32. Clarifying questions gate:
+33. Clarifying questions gate:
     - If task_signals.explicit_file_targets is non-empty AND the action is unambiguous:
       SKIP questions entirely. The task is self-describing.
     - Otherwise: ask at most 1 clarifying question from Area 1 (Problem Scope) only.
@@ -142,7 +142,7 @@ EXPRESS MCP FALLBACK: If MCP state tools (create_session, transition_phase, arch
     Questions MUST use the user prompt tool (not plain text). Use the choose
     variant with 2-4 options where possible.
     </HARD-GATE>
-33. Present structured Express brief as plain text, then ask for approval.
+34. Present structured Express brief as plain text, then ask for approval.
     <HARD-GATE>
     The brief MUST be plain text output in the model response.
     The approval MUST be a SEPARATE user prompt tool call — not embedded in the
@@ -150,16 +150,16 @@ EXPRESS MCP FALLBACK: If MCP state tools (create_session, transition_phase, arch
     These are two distinct actions: first emit the brief as text, then call the
     user prompt tool for approval. Do NOT combine them into one text block.
     </HARD-GATE>
-34. On approval, create session with workflow_mode: "express", exactly 1 phase.
+35. On approval, create session with workflow_mode: "express", exactly 1 phase.
     On rejection, revise. On second rejection, escalate to Standard → step 9.
-35. Call `get_skill_content` with resources: ["agent-base-protocol", "filesystem-safety-protocol"] and prepend them to the delegation prompt.
+36. Call `get_skill_content` with resources: ["agent-base-protocol", "filesystem-safety-protocol"] and prepend them to the delegation prompt.
     Include `workflow_mode: express` in the delegation prompt metadata to trigger
     the agent's Fast Pre-Flight instead of full Pre-Flight.
-36. Delegate to the assigned agent.
+37. Delegate to the assigned agent.
     <HARD-GATE>
     Same dispatch rule as step 23: call agent by registered tool name, not generalist.
     </HARD-GATE>
-37. Parse Task Report from the agent's response. Call transition_phase to persist results.
+38. Parse Task Report from the agent's response. Call transition_phase to persist results.
     <HARD-GATE>
     You MUST call transition_phase after the implementing agent returns. Extract
     files_created, files_modified, files_deleted, and downstream_context from the
@@ -167,7 +167,7 @@ EXPRESS MCP FALLBACK: If MCP state tools (create_session, transition_phase, arch
     state has no record of what was delivered. Do NOT skip to code review or archive
     without calling transition_phase first.
     </HARD-GATE>
-38. Code review gate:
+39. Code review gate:
     - If files_modified ≤ 2 AND no security-critical files touched:
       SKIP code review. Record "review_skipped: low_impact" in session state.
     - Security-critical files: any file matching .env*, auth*, secret*, *.key, *.pem,
@@ -179,8 +179,8 @@ EXPRESS MCP FALLBACK: If MCP state tools (create_session, transition_phase, arch
     implementing agent (1 retry). Orchestrator MUST NOT write code directly.
     If retry fails, escalate to user.
     </HARD-GATE>
-39. Call archive_session.
-40. Present summary.
+40. Call archive_session.
+41. Present summary.
 
 INSTANT WORKFLOW (trivial tasks only — jumped to from step 2 or step 8)
 
@@ -195,31 +195,31 @@ INSTANT LOGGING: After completing the task, append a one-line entry to
 <state_dir>/instant-log.md with format: `| <ISO-date> | <task-summary> | <files-touched> | <result> |`.
 Create the file with a markdown table header if it does not exist.
 
-41. Verify classification is trivial:
+42. Verify classification is trivial:
     - Task matches trivial indicators: is_config_only OR is_single_file_edit OR
       is_service_restart OR is_typo_fix (from assess_task_complexity task_signals)
     - No architectural decisions required
     - No multi-file coordination needed (estimated_files_touched ≤ 2)
     - No security-critical files involved (security_critical_files is empty)
-    If ANY verification fails → escalate to Express (step 31).
+    If ANY verification fails → escalate to Express (step 32).
     <HARD-GATE>
     Instant Path may touch at most 2 files. If the change cascades to 3+ files
-    during execution, STOP, undo changes, and reclassify as simple → step 31.
+    during execution, STOP, undo changes, and reclassify as simple → step 32.
     </HARD-GATE>
 
-42. Execute the task directly:
+43. Execute the task directly:
     - Read the target file(s)
     - Make the change (edit file, update config value, etc.)
     - Run the command if needed (restart service, reload config, etc.)
 
-43. Present the result to the user:
+44. Present the result to the user:
     - What was changed (show the diff or before/after)
     - What command was run and its output (if any)
     - Verification that the change took effect
 
-44. Append to instant-log.md. DONE.
+45. Append to instant-log.md. DONE.
 
 EXPRESS RESUME (when resuming an Express session from get_session_status)
-If phase is pending: re-generate and present brief (step 33). On approval, proceed to delegation (step 36).
-If phase is in_progress: re-delegate with same scope (step 36).
-If phase is completed but session is in_progress: run code review (step 38), then archive (step 39).
+If phase is pending: re-generate and present brief (step 34). On approval, proceed to delegation (step 37).
+If phase is in_progress: re-delegate with same scope (step 37).
+If phase is completed but session is in_progress: run code review (step 39), then archive (step 40).
