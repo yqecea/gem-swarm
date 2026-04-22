@@ -9,6 +9,7 @@ const {
 const { StateError } = require('../../lib/errors');
 
 const PHASE_LIMITS = {
+  trivial: 1,
   simple: 3,
   medium: 5,
   complex: Infinity,

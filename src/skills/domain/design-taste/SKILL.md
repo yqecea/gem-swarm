@@ -54,6 +54,7 @@ If the user explicitly asks for one of these styles, honor it directly:
 - `gallery-minimal`
 - `minimalism`
 - `monochrome-modern`
+- `nothing-design`
 - `premium-bento`
 - `quiet-luxury`
 - `soft`
@@ -69,6 +70,8 @@ Also honor obvious close phrasings such as:
 - `editorial premium` -> `editorial-premium`
 - `gallery minimal` -> `gallery-minimal`
 - `monochrome modern` -> `monochrome-modern`
+- `nothing` or `nothing style` or `nothing phone` -> `nothing-design`
+- `industrial minimalism` or `braun` or `teenage engineering` -> `nothing-design`
 - `premium bento` -> `premium-bento`
 - `quiet luxury` -> `quiet-luxury`
 - `soft brutalism` -> `soft-brutalism`
@@ -121,6 +124,9 @@ Use this routing logic:
 - `soft-brutalism`
   - Choose for: bold structure with warmer edges, playful severity, contemporary fashion-tech energy
   - Good for: creator tools, trend brands, culture products, bold startups
+- `nothing-design`
+  - Choose for: industrial minimalism, monochrome instrument panels, typographic-led data interfaces, Swiss precision with OLED black
+  - Good for: hardware products, tech specs, data dashboards, developer tools, scientific instruments, portfolio sites that need mechanical precision
 - `warm-modern`
   - Choose for: contemporary, human, warm, polished websites that should not feel cold or sterile
   - Good for: agencies, service brands, consumer products, modern company sites
@@ -139,6 +145,8 @@ If the user is vague, decide by these signals:
 - soft consumer friendliness -> `soft`
 - warm professional polish -> `warm-modern`
 - dense functional software -> `dashboards`
+- industrial precision + monochrome + data-as-beauty -> `nothing-design`
+- instrument panel + mechanical + Swiss typography -> `nothing-design`
 
 Do not default to the same style every time. Make a real selection.
 

@@ -276,5 +276,10 @@
       "list_directory",
       "ask_user"
     ]
+  },
+  {
+    "name": "website-cloner",
+    "capabilities": "full",
+    "tools": []
   }
 ]

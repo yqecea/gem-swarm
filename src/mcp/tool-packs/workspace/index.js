@@ -32,14 +32,14 @@ function createToolPack() {
       {
         name: 'assess_task_complexity',
         description:
-          'Analyze repo structure and return factual signals for complexity classification. Does NOT classify — returns signals for the model to interpret.',
+          'Analyze repo structure and task text to return classification signals. Returns repo signals (file count, frameworks) and, when task_description is provided, task-aware signals (suggested_tier, task_scope, trivial indicators). The model makes the final classification decision using these signals.',
         inputSchema: {
           type: 'object',
           properties: {
             task_description: {
               type: 'string',
               description:
-                'The task description (reserved for future keyword analysis).',
+                'The user\'s task description text. When provided, enables task-aware signals: suggested_tier (trivial/simple/medium/complex), task_signals (is_config_only, is_single_file_edit, etc.), pattern_scores, and tier_confidence. ALWAYS pass the user request text here for accurate classification.',
             },
           },
         },
@@ -54,7 +54,7 @@ function createToolPack() {
             plan: { type: 'object' },
             task_complexity: {
               type: 'string',
-              enum: ['simple', 'medium', 'complex'],
+              enum: ['trivial', 'simple', 'medium', 'complex'],
             },
           },
           required: ['plan', 'task_complexity'],

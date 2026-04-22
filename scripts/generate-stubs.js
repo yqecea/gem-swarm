@@ -41,21 +41,58 @@ for (const file of files) {
     fm[key] = val;
   }
 
+
+
+  // Parse tools into YAML list format (Gemini CLI requires `-` list, not inline `[...]`)
+  const toolsRaw = fm['tools.gemini'] || fm.tools || '[]';
+  const toolsList = toolsRaw
+    .replace(/^\[|\]$/g, '')
+    .split(',')
+    .map(t => t.trim())
+    .filter(Boolean);
+  const toolsYaml = toolsList.map(t => `  - ${t}`).join('\n');
+
   // Build stub with Gemini CLI native frontmatter
   const stub = [
     '---',
     `name: ${stubName}`,
     `description: ${fm.description || `"${agentName} specialist agent"`}`,
     'kind: local',
-    `tools: ${fm['tools.gemini'] || fm.tools || '[]'}`,
+    'tools:',
+    toolsYaml,
     `max_turns: ${fm.max_turns || 25}`,
     `temperature: ${fm.temperature || 0.2}`,
     `timeout_mins: ${fm.timeout_mins || 10}`,
+    'mcp_servers:',
+    '  gem-swarm:',
+    `    command: 'node'`,
+    `    args: ['\${extensionPath}/mcp/gem-swarm-server.js']`,
+    `    cwd: '\${extensionPath}'`,
+    `    trust: true`,
     '---',
     '',
-    `You are the ${agentName} specialist. Your full methodology is loaded via the gem-swarm MCP server.`,
+    `# ${agentName} specialist`,
     '',
-    'When you receive a delegation, follow the methodology precisely.',
+    '## Activation Protocol',
+    '',
+    'On activation, load your full methodology and skills:',
+    '',
+    '1. Call `mcp_gem-swarm_get_agent` with your agent name to load your complete methodology.',
+    '2. Call `mcp_gem-swarm_get_skill_content` for each skill listed in your methodology.',
+    '3. Apply the loaded methodology to the task.',
+    '',
+    '## Direct @agent Mode',
+    '',
+    'When invoked directly via `@' + stubName + '`:',
+    '- You are NOT inside an orchestration session',
+    '- Do NOT produce `## Task Report` or `## Downstream Context` headers',
+    '- Respond naturally as a specialist, applying your loaded methodology',
+    '',
+    '## Orchestrated Mode',
+    '',
+    'When delegated by the orchestrator (your prompt starts with `Agent: / Phase: / Batch: / Session:`):',
+    '- Follow the delegation prompt precisely',
+    '- End your response with `## Task Report` and `## Downstream Context` sections',
     '',
   ].join('\n');
 

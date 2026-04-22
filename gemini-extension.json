@@ -47,6 +47,7 @@
         "${extensionPath}/mcp/gem-swarm-server.js"
       ],
       "cwd": "${extensionPath}",
+      "trust": true,
       "env": {
         "GEM_SWARM_WORKSPACE_PATH": "${workspacePath}"
       }

@@ -87,6 +87,46 @@ Agents: security-auditor → penetration-tester → synthesis
 3. Synthesize with prioritized remediation
 ```
 
+### Pattern 4: Single-Domain Decomposition (Same-Agent Parallel)
+```
+Agents: [same-agent] × N → [same-agent] (integration) → [same-agent] × M (review) → [same-agent] (fix)
+
+1. Foundation phase: shared types, design tokens, base layout
+2. Parallel build: frontend_specialist × 3 (sections with non-overlapping files)
+3. Integration: frontend_specialist stitches outputs into shared layout
+4. Parallel review: frontend_specialist × 3 (responsive / design / a11y)
+5. Fix: frontend_specialist addresses Critical+Major findings
+```
+
+**Auto-trigger conditions:**
+- 70%+ of work maps to ONE agent
+- Deliverables split into 2-4 independent file sets
+- Task complexity is medium or complex
+
+**When to use:**
+- Landing pages, multi-section sites
+- Feature-rich apps where features are independent
+- Any single-domain task large enough to benefit from parallelism
+
+### Pattern 5: Build → Review → Fix Pipeline
+```
+Agents: [build-agent] → [same-agent] × 3 (review) → [same-agent] (fix)
+
+1. Single agent does full build (reads all skills, full context)
+2. Parallel review: 3 instances each checking one quality dimension
+3. Fix: Single agent addresses all Critical+Major findings
+```
+
+**Auto-trigger conditions:**
+- Task involves UI/frontend/mobile output
+- Build phase creates 3+ files
+- Sections share too many files for parallel building
+
+**When to use:**
+- Redesigns of existing sites (too interconnected for parallel build)
+- Small-medium pages where parallel build overhead exceeds benefit
+- When design coherence across sections is critical
+
 ---
 
 ## Available Agents

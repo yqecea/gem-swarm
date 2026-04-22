@@ -71,6 +71,28 @@ If any convention is ambiguous or no precedent exists, default to the most commo
 
 ---
 
+## Express Fast Pre-Flight
+
+When the delegation prompt includes `workflow_mode: express`, use this reduced protocol **instead of** the full 3-step Pre-Flight above. Express tasks are scoped, bounded, and low-risk — the orchestrator has already validated scope and file targets.
+
+### Fast Step 1 — Read Target Files Only
+
+Read ONLY the files listed for modification in the delegation prompt. Do not read the entire project. Do not read adjacent files unless the task explicitly requires understanding an import or dependency from them.
+
+### Fast Step 2 — Match Existing Style
+
+From the target files you read, match:
+- Indentation (tabs vs spaces, width)
+- Quote style (single vs double)
+- Naming conventions visible in the file
+- Error handling patterns visible in the file
+
+### Fast Step 3 — Execute
+
+Proceed directly to the task. Skip full convention extraction, framework detection, and broad scope verification — trust the orchestrator's file list and scope boundaries.
+
+---
+
 ## Output Handoff Contract
 
 Every agent must conclude with a **Handoff Report** containing two parts. This replaces the basic Task Report with a format designed for downstream consumption.

@@ -129,39 +129,36 @@ Explicitly state what the agent must NOT do:
 
 | Task Domain | Agent | Key Capability |
 |-------------|-------|---------------|
-| System architecture, component design | `architect` | Read-only analysis, architecture patterns |
-| API contracts, endpoint design | `api-designer` | Read-only, REST/GraphQL expertise |
-| Feature implementation, coding | `coder` | Full read/write/shell access |
-| Code quality assessment | `code-reviewer` | Read-only, verified findings |
-| Database schema, queries, ETL | `data-engineer` | Full read/write/shell access |
-| Bug investigation, root cause | `debugger` | Read + shell for investigation |
-| CI/CD, infrastructure, deployment | `devops-engineer` | Full read/write/shell access |
-| Performance analysis, profiling | `performance-engineer` | Read + shell for profiling |
-| Code restructuring, modernization | `refactor` | Read/write/shell, skill activation |
-| Security assessment, vulnerability | `security-engineer` | Read + shell for scanning |
-| Test creation, TDD, coverage | `tester` | Full read/write/shell access |
-| Documentation, READMEs, guides | `technical-writer` | Read/write, no shell |
-| Technical SEO auditing | `seo-specialist` | Read + shell + web search/fetch |
-| Marketing copy, content writing | `copywriter` | Read/write |
-| Content planning, strategy | `content-strategist` | Read + web search/fetch |
-| User experience design | `ux-designer` | Read/write + web search |
-| WCAG compliance auditing | `accessibility-specialist` | Read + shell + web search |
-| Requirements, product strategy | `product-manager` | Read/write + web search |
-| Tracking, measurement | `analytics-engineer` | Full read/write/shell access |
-| Internationalization | `i18n-specialist` | Full read/write/shell access |
-| Design tokens, theming | `design-system-engineer` | Full read/write/shell access |
-| Legal, regulatory compliance | `compliance-reviewer` | Read + web search/fetch |
+| React/Next.js, UI/UX, responsive design | `frontend_specialist` | Full read/write/shell — design systems, accessibility, Taste Skill Pack |
+| API, server architecture, backend logic | `backend_specialist` | Full read/write/shell — API patterns, middleware, auth |
+| Schema design, queries, migrations, indexing | `database_architect` | Full read/write/shell — ORM, query optimization |
+| OWASP 2025, supply chain, zero trust | `security_auditor` | Full read/write/shell + web search |
+| Offensive security, exploit analysis | `penetration_tester` | Full read/write/shell + web search |
+| Unit/integration testing, TDD, coverage | `test_engineer` | Full read/write/shell |
+| E2E testing, Playwright, CI pipelines | `qa_automation_engineer` | Full read/write/shell |
+| Root cause analysis, crash investigation | `debugger` | Read + shell (no write) |
+| Profiling, Core Web Vitals, bundle size | `performance_optimizer` | Full read/write/shell + web search |
+| CI/CD, deployment, server management | `devops_engineer` | Full read/write/shell + web search |
+| React Native, Flutter, mobile patterns | `mobile_developer` | Full read/write/shell |
+| Game mechanics, engines (Unity/Godot/Phaser) | `game_developer` | Full read/write/shell |
+| Technical documentation, READMEs, API docs | `documentation_writer` | Full read/write/shell |
+| Requirements, user stories, prioritization | `product_manager` | Read + shell (no write) |
+| Roadmap, backlog, stakeholder management | `product_owner` | Read + shell (no write) |
+| Task breakdown, dependency graphs, planning | `project_planner` | Read + shell (no write) |
+| Codebase discovery, architectural analysis | `explorer_agent` | Read + shell + web search (no write) |
+| Legacy code analysis, codebase archaeology | `code_archaeologist` | Read-only analysis |
+| SEO, GEO, E-E-A-T, Core Web Vitals | `seo_specialist` | Read + shell + web search + write |
 
 ## Agent Tool Dispatch Contract
 
-Delegate to the assigned agent using the dispatch pattern from `get_runtime_context` (loaded at session start, step 0). Every Maestro agent in the Agent Roster carries its frontmatter configuration:
+Delegate to the assigned agent using the dispatch pattern from `get_runtime_context` (loaded at session start, step 0). Every gem-swarm agent in the Agent Roster carries its frontmatter configuration:
 
-- `temperature`: Controls output determinism (e.g., coder uses 0.2 for precise code)
-- `max_turns`: Prevents runaway sessions (e.g., 25 turns for implementation agents)
+- `temperature`: Controls output determinism (e.g., frontend_specialist uses 0.2 for precise code)
+- `max_turns`: Prevents runaway sessions (e.g., 25-30 turns for implementation agents)
 - `tools`: Restricts the agent to its authorized tool surface (e.g., read-only agents cannot use file-writing tools)
 - Body: Contains the agent's specialized methodology and decision frameworks
 
-Using a generic/default agent tool bypasses all of this — it uses default temperature, has no turn limit, no tool restrictions, and no specialized methodology. Never use a generic agent tool for Maestro phase delegations.
+Using a generic/default agent tool bypasses all of this — it uses default temperature, has no turn limit, no tool restrictions, and no specialized methodology. Never use a generic agent tool for gem-swarm phase delegations.
 
 Every delegation must include the required header fields:
 
@@ -197,9 +194,74 @@ For each agent in a ready batch:
 
 Native parallel batches may pause if an agent asks a follow-up question. Scope prompts tightly enough that questions are rare.
 
+### Same-Agent Parallel Dispatch
+
+When the implementation plan assigns the same agent to multiple parallel phases (see Same-Agent Decomposition in implementation-planning):
+
+1. **Unique Phase Headers**: Each dispatch MUST have a unique Phase ID:
+   ```
+   Agent: frontend_specialist
+   Phase: 3/8
+   Batch: batch-2
+   Session: session-123
+   Sub-task: Hero Section + CTA (components/Hero.tsx, components/CTA.tsx)
+   ```
+
+2. **Explicit File Isolation**: Each prompt lists ONLY its assigned files and explicitly excludes others:
+   ```
+   Files you own: components/Hero.tsx, components/CTA.tsx
+   
+   Do NOT create or modify files assigned to other instances:
+   - components/Header.tsx (Phase 2)
+   - components/Footer.tsx (Phase 4)
+   - globals.css, layout.tsx, page.tsx (Integration Phase 5)
+   ```
+
+3. **Shared Design Context**: All parallel instances receive the same upstream context (foundation phase outputs, design tokens, chosen style) but produce independent deliverables.
+
+4. **Integration Awareness**: Include in each prompt:
+   ```
+   Your output will be integrated with parallel work from other instances.
+   Export your components cleanly. Do NOT modify shared layout files.
+   Integration happens in a dedicated phase after all parallel instances complete.
+   ```
+
+### Review-Mode Delegation
+
+When dispatching review phases from the Automatic Quality Review Pipeline:
+
+1. **Read-Only Enforcement**: Review instances MUST NOT modify files. Override the agent's normal write capabilities:
+   ```
+   MODE: REVIEW ONLY
+   You have READ access to all project files but MUST NOT create, modify, or delete any files.
+   Your output is a structured findings report only.
+   ```
+
+2. **Focus Scoping**: Each review instance gets ONE quality dimension:
+   ```
+   REVIEW FOCUS: [Responsive Design / Design Compliance / Accessibility + Performance]
+   Review ONLY your assigned dimension. Do not duplicate work from other reviewers.
+   ```
+
+3. **Findings Format**: Enforce structured output for downstream aggregation:
+   ```
+   ## Findings Report: [Focus Area]
+   
+   ### Critical
+   - [file:line] Description. Suggested fix: ...
+   
+   ### Major  
+   - [file:line] Description. Suggested fix: ...
+   
+   ### Minor
+   - [file:line] Description. Suggested fix: ...
+   ```
+
+4. **Fix Phase Aggregation**: After all review instances return, aggregate all Critical + Major findings into a single Fix Phase prompt for the implementing agent.
+
 ### Tool Restriction Enforcement
 
-Maestro enforces tool permissions at two levels:
+gem-swarm enforces tool permissions at two levels:
 
 **Level 1: Native enforcement (primary)**
 
@@ -260,7 +322,7 @@ All agents in a parallel batch must complete before:
 
 ## Hook Integration
 
-Maestro hooks fire at agent boundaries during delegation, providing context injection and output validation. Understanding hook behavior is essential for constructing correct delegation prompts.
+gem-swarm hooks fire at agent boundaries during delegation, providing context injection and output validation. Understanding hook behavior is essential for constructing correct delegation prompts.
 
 ### Agent Tracking
 
@@ -299,42 +361,42 @@ This enforcement is the runtime complement to the Output Handoff Contract define
 
 ## Validation Criteria Templates
 
-### For Implementation Agents (`coder`, `data-engineer`, `devops-engineer`)
+### For Implementation Agents (`frontend_specialist`, `backend_specialist`, `database_architect`, `devops_engineer`, `mobile_developer`, `game_developer`)
 ```
 Validation: [build command] && [lint command] && [test command]
 ```
 
-### For Refactoring Agents (`refactor`)
-```
-Validation: [build command] && [test command]
-Verify: No behavior changes — all existing tests must still pass
-```
-
-### For Test Agents (`tester`)
+### For Test Agents (`test_engineer`, `qa_automation_engineer`)
 ```
 Validation: [test command]
 Verify: All new tests pass, report coverage metrics
 ```
 
-### For Assessment Agents (`architect`, `api-designer`, `code-reviewer`, `debugger`, `performance-engineer`, `security-engineer`, `seo-specialist`, `accessibility-specialist`, `content-strategist`, `compliance-reviewer`)
+### For Assessment Agents (`debugger`, `explorer_agent`, `code_archaeologist`, `performance_optimizer`, `product_manager`, `product_owner`, `project_planner`)
 ```
-Validation: N/A (assessment-only — no write tools)
+Validation: N/A (assessment-only or read-only tools)
 Verify: Findings reference specific files and line numbers
 ```
 
-### For Documentation Agents (`technical-writer`, `copywriter`)
+### For Security Agents (`security_auditor`, `penetration_tester`)
+```
+Validation: Security scan tools + manual review
+Verify: Findings include severity, affected files, and remediation steps
+```
+
+### For Documentation Agents (`documentation_writer`)
 ```
 Validation: Verify all links resolve, code examples are syntactically valid
 ```
 
-### For Design and Product Agents (`ux-designer`, `product-manager`)
+### For Product Agents (`product_manager`, `product_owner`)
 ```
-Validation: N/A (design and requirements artifacts)
+Validation: N/A (requirements and strategy artifacts)
 Verify: Deliverables reference user needs and acceptance criteria
 ```
 
-### For Implementation Specialists (`analytics-engineer`, `i18n-specialist`, `design-system-engineer`)
+### For SEO Agent (`seo_specialist`)
 ```
-Validation: [build command] && [lint command] && [test command]
-Verify: Domain-specific integration validated (tracking fires, locales render, tokens apply)
+Validation: SEO audit tools + Core Web Vitals check
+Verify: Recommendations reference specific pages and measurable metrics
 ```

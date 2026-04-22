@@ -51,7 +51,7 @@ Break the implementation into phases following these principles:
 1. **Foundation First**: Infrastructure, configuration, and shared types/interfaces come first
 2. **Dependencies Flow Downward**: A phase can only depend on phases with lower IDs
 3. **Single Responsibility**: Each phase delivers a cohesive unit of functionality
-4. **Agent Alignment**: Each phase maps to one or two agent specializations
+4. **Agent Alignment**: Each phase maps to an agent specialization. The SAME agent MAY appear in multiple parallel phases when the task decomposes into independent sub-deliverables within one domain (see Same-Agent Decomposition below)
 5. **Agent Capability Match**: Verify the assigned agent's tool tier supports the phase deliverables (see compatibility check below)
 6. **Testability**: Each phase should be independently validatable
 
@@ -104,6 +104,93 @@ Phases can run in parallel when:
 - Their validation can run independently
 
 Mark parallel-eligible phases with `parallel: true` and group them into execution batches.
+
+### Same-Agent Parallel Decomposition
+
+When 70%+ of the work maps to a single agent specialization, decompose by **deliverable** — not by agent type. The orchestrator MUST auto-detect this condition and apply it without user configuration.
+
+#### Trigger Conditions (auto-detected by planner)
+- The task is primarily one domain (e.g., "build a landing page" = all frontend)
+- The deliverables split into 2-4 independent units with non-overlapping files
+- Each unit is self-contained enough for the agent to complete without the other units
+
+#### Decomposition Strategies
+
+| Strategy | Example | When to Use |
+|----------|---------|-------------|
+| **By section** | Header+Nav, Hero+CTA, Features, Footer+Contact | Landing pages, multi-section layouts |
+| **By feature** | Auth UI, Dashboard, Settings page | Feature-rich apps |
+| **By concern** | Layout+Structure, Styling+Animations, Responsive+A11y | When sections share too many files |
+
+#### File Ownership Contract
+Each parallel instance of the same agent MUST own non-overlapping files:
+- Instance A: `components/Header.tsx`, `components/Nav.tsx`
+- Instance B: `components/Hero.tsx`, `components/Features.tsx`
+- Instance C: `components/Footer.tsx`, `components/Contact.tsx`
+
+Shared files (e.g., `globals.css`, `layout.tsx`, `page.tsx`) go to a **post-batch integration phase** — a single agent that stitches the parallel outputs together.
+
+#### Post-Batch Integration Phase
+After parallel same-agent phases complete, always add a lightweight integration phase:
+- **Agent**: same specialist (e.g., `frontend_specialist`)
+- **Task**: import all parallel outputs, wire into shared layout, resolve conflicts
+- **Depends on**: ALL parallel phases
+- **Files**: only shared/barrel files (layout, page, globals)
+
+### Automatic Quality Review Pipeline
+
+For any task that produces user-facing output (UI, landing page, app), the planner MUST append a review layer AFTER the build phases complete. This is automatic — the user does not request it.
+
+#### When to Append (auto-detected)
+- The task involves `frontend_specialist`, `mobile_developer`, or `game_developer`
+- The build phase(s) create or modify 3+ files
+- The task complexity is `medium` or `complex`
+
+#### Review Pipeline Structure
+
+```
+Build Phase(s) → Integration (if parallel) → Review Batch (parallel) → Fix Phase
+```
+
+**Review Batch**: 2-3 parallel instances of the SAME implementing agent, each reviewing ONE quality dimension:
+
+| Review Instance | Focus | What to Check |
+|----------------|-------|---------------|
+| Responsive Review | Layout at 375px, 768px, 1024px, 1440px | Breakpoints, overflow, touch targets, safe areas |
+| Design Compliance | Style adherence | Does output match the chosen taste style? Anti-slop check, animation quality |
+| Accessibility + Performance | A11y + Core Web Vitals | ARIA, keyboard nav, contrast, image optimization, bundle size |
+
+Each review instance produces a structured findings report (Critical/Major/Minor). The findings feed into a single **Fix Phase** where the implementing agent addresses Critical and Major issues.
+
+#### Review Phase Template
+```
+Agent: [same as build agent]
+Phase: [N]/[total]
+Task: REVIEW ONLY — do NOT modify files
+Focus: [Responsive / Design Compliance / Accessibility + Performance]
+
+Review the following files created in previous phases:
+[file list from build phases]
+
+Produce a findings report with:
+- Severity: Critical / Major / Minor
+- File + line number
+- What's wrong
+- Suggested fix
+
+Do NOT write code. Report findings only.
+```
+
+#### Fix Phase Template
+```
+Agent: [same as build agent]
+Phase: [N]/[total]
+Task: Fix Critical and Major findings from review batch
+
+[Aggregated findings from all review instances]
+
+Fix each finding. Skip Minor unless trivial.
+```
 
 ## Implementation Detail Requirements
 
@@ -206,8 +293,9 @@ If `validate_plan` is available, review its `parallelization_profile` and `redun
 1. Match the primary task domain to the agent specialization
 2. Consider tool requirements — does the task need shell access? Write access?
 3. For parallel phases, assign non-overlapping file ownership to each agent
-4. Prefer single-agent phases for clarity; use multi-agent only when distinct specializations are needed
+4. Prefer focused single-deliverable phases. The same agent MAY run in multiple parallel phases with distinct file ownership (see Same-Agent Decomposition)
 5. Never assign more files to an agent than it can handle within its `max_turns` limit
+6. For UI/frontend tasks, always append the Automatic Quality Review Pipeline after build phases
 
 ### Token Budget Estimation
 Estimate token consumption per phase based on:

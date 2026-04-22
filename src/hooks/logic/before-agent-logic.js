@@ -28,9 +28,21 @@ function handleBeforeAgent(ctx) {
   let validSession = false;
   try { assertSessionId(ctx.sessionId); validSession = true; } catch (_) {}
 
-  if (agentName && validSession) {
+  // Only enable handoff validation when an active orchestration session exists.
+  // Direct @agent calls (no active session) should NOT be subject to
+  // Task Report / Downstream Context format enforcement.
+  let hasActiveOrchestration = false;
+  if (validSession) {
+    const sessionPath = state.resolveActiveSessionPath(ctx.cwd);
+    const sessionContent = readFileSafe(sessionPath, '');
+    hasActiveOrchestration = sessionContent.includes('status: in_progress');
+  }
+
+  if (agentName && validSession && hasActiveOrchestration) {
     hookState.setActiveAgent(ctx.sessionId, agentName);
-    log('INFO', `BeforeAgent: Detected agent '${agentName}' — set active agent [session=${ctx.sessionId}]`);
+    log('INFO', `BeforeAgent: Detected agent '${agentName}' in active orchestration — set active agent [session=${ctx.sessionId}]`);
+  } else if (agentName) {
+    log('INFO', `BeforeAgent: Detected agent '${agentName}' — direct @agent call, skipping handoff validation`);
   }
 
   const sessionPath = state.resolveActiveSessionPath(ctx.cwd);

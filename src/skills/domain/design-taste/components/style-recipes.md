@@ -112,4 +112,17 @@ This file maps the shared components library to the specific taste skills. Use i
 - Use from React Bits: `fade-content`, `count-up`, `glare-hover`, `scroll-reveal`.
 - Use from 21st: image gallery, card carousel, and practical UI pieces for friendly utility sections.
 - Push further by: warmer imagery, lifestyle or product scenes, calm stagger, and more bespoke navigation.
-- Avoid: flattening into generic clean landing-page UI with a peach accent.
+- Avoid flattening into generic clean landing-page UI with a peach accent.
+
+## Nothing Design
+- Start with: Doto display headlines, Space Mono ALL CAPS labels, OLED black background.
+- Use dot-matrix Doto font for hero typography moments (72px+).
+- Use dot-grid backgrounds (`radial-gradient(circle, #333 1px, transparent 1px)`, 16px grid) for subtle texture.
+- Use segmented progress bars (discrete rectangular blocks, 2px gaps, square ends) for all progress/proportion data.
+- Use stat rows: Space Mono ALL CAPS label left, value right with status color.
+- Use bracket navigation `[ HOME ]  GALLERY  INFO` or pipe `HOME | GALLERY | INFO`.
+- Use inline status text `[SAVED]`, `[ERROR: ...]` instead of toast notifications.
+- Use underline inputs (1px bottom border) over fully bordered inputs.
+- Use gauge/dial/compass widgets for circular metrics.
+- Push further by: oversized hero metrics in Space Mono, instrument-panel card layouts with category labels, segmented spinners for loading.
+- Avoid: shadows, blur, gradients, spring animations, skeleton loading, filled icons, color beyond grayscale + red accent.
