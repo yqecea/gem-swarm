@@ -3,7 +3,14 @@ name: website_cloner
 description: "Pixel-perfect website cloner that replicates any website using a 5-phase workflow: setup, screenshot, extract, clone, QA. Uses chrome-devtools MCP for visual capture and style extraction. Produces React components with Tailwind CSS arbitrary values and motion animations. Triggers on keywords like clone, copy, replicate, recreate website."
 kind: local
 tools:
-
+  - read_file
+  - write_file
+  - replace
+  - run_shell_command
+  - grep_search
+  - glob
+  - list_directory
+  - ask_user
 max_turns: 50
 temperature: 0.1
 timeout_mins: 10
