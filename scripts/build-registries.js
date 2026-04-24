@@ -18,10 +18,27 @@ function buildAgentRegistry() {
     if (!fmMatch) continue;
 
     const fm = {};
-    for (const line of fmMatch[1].split('\n')) {
+    const fmLines = fmMatch[1].split('\n');
+    for (let i = 0; i < fmLines.length; i++) {
+      const line = fmLines[i];
       const idx = line.indexOf(':');
       if (idx === -1) continue;
-      fm[line.substring(0, idx).trim()] = line.substring(idx + 1).trim();
+      // Skip indented lines (they are list items belonging to a previous key)
+      if (/^\s+-\s/.test(line)) continue;
+      const key = line.substring(0, idx).trim();
+      let val = line.substring(idx + 1).trim();
+      // If value is empty, check for multi-line YAML list on following lines
+      if (!val) {
+        const items = [];
+        while (i + 1 < fmLines.length && /^\s+-\s/.test(fmLines[i + 1])) {
+          items.push(fmLines[i + 1].replace(/^\s+-\s*/, '').trim());
+          i++;
+        }
+        if (items.length > 0) {
+          val = '[' + items.join(', ') + ']';
+        }
+      }
+      fm[key] = val;
     }
 
     const name = path.basename(file, '.md');
