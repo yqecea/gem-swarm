@@ -1,4 +1,5 @@
 {
+  "audit-v2": "skills/shared/audit-v2/SKILL.md",
   "code-review": "skills/shared/code-review/SKILL.md",
   "delegation": "skills/shared/delegation/SKILL.md",
   "agent-base-protocol": "skills/shared/delegation/protocols/agent-base-protocol.md",

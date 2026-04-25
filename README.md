@@ -2,7 +2,7 @@
 
 Multi-agent orchestration extension for [Gemini CLI](https://github.com/google-gemini/gemini-cli).
 
-19 domain-specialist agents · 37 skills · 12 commands · parallel subagent dispatch · persistent sessions
+20 domain-specialist agents · 42 skills · 12 commands · parallel subagent dispatch · persistent sessions
 
 ---
 
@@ -21,7 +21,7 @@ gemini
 > /gem-swarm:status
 ```
 
-**That's it.** You now have 19 specialist agents ready to work.
+**That's it.** You now have 20 specialist agents ready to work.
 
 ### Быстрый старт (RU)
 
@@ -38,7 +38,7 @@ gemini
 > /gem-swarm:status
 ```
 
-**Готово.** 19 агентов-специалистов к вашим услугам.
+**Готово.** 20 агентов-специалистов к вашим услугам.
 
 ---
 
@@ -145,6 +145,7 @@ The **full 4-phase workflow** with design dialogue, implementation planning, mul
 | `explorer_agent` | Codebase discovery, architectural analysis | `@explorer_agent` |
 | `code_archaeologist` | Legacy code analysis, codebase archaeology | `@code_archaeologist` |
 | `seo_specialist` | SEO, GEO, E-E-A-T, Core Web Vitals | `@seo_specialist` |
+| `website_cloner` | Pixel-perfect website cloning, 5-phase workflow | `@website_cloner` |
 
 ---
 
@@ -162,7 +163,7 @@ User
                                     │   └── Content tools (skills, agents, runtime context)
                                     │
                                     ├── Subagent dispatch (native Gemini CLI agents)
-                                    │   └── 19 specialists with per-agent tools, temperature, turn limits
+                                    │   └── 20 specialists with per-agent tools, temperature, turn limits
                                     │
                                     ├── Hooks (SessionStart, BeforeAgent, AfterAgent, SessionEnd)
                                     └── Policies (shell command safety rules)

@@ -61,6 +61,10 @@ for (const file of files) {
     .split(',')
     .map(t => t.trim())
     .filter(Boolean);
+  if (toolsList.length === 0) {
+    console.error(`ERROR: ${agentName} has 0 tools — check frontmatter for 'tools' or 'tools.gemini'`);
+    process.exit(1);
+  }
   const toolsYaml = toolsList.map(t => `  - ${t}`).join('\n');
 
   // Build stub with Gemini CLI native frontmatter

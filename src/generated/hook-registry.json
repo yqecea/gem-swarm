@@ -1,8 +1,4 @@
 {
-  "before-tool": {
-    "module": "hooks/logic/before-tool-logic.js",
-    "fn": "handleBeforeTool"
-  },
   "after-agent": {
     "module": "hooks/logic/after-agent-logic.js",
     "fn": "handleAfterAgent"
@@ -10,6 +6,10 @@
   "before-agent": {
     "module": "hooks/logic/before-agent-logic.js",
     "fn": "handleBeforeAgent"
+  },
+  "before-tool": {
+    "module": "hooks/logic/before-tool-logic.js",
+    "fn": "handleBeforeTool"
   },
   "session-end": {
     "module": "hooks/logic/session-end-logic.js",

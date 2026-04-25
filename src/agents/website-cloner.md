@@ -1,21 +1,11 @@
 ---
 name: website-cloner
 description: "Pixel-perfect website cloner that replicates any website using a 5-phase workflow: setup, screenshot, extract, clone, QA. Uses chrome-devtools MCP for visual capture and style extraction. Produces React components with Tailwind CSS arbitrary values and motion animations. Triggers on keywords like clone, copy, replicate, recreate website."
-tools.gemini:
-  - read_file
-  - write_file
-  - replace
-  - run_shell_command
-  - grep_search
-  - glob
-  - list_directory
+tools.gemini: [read_file, write_file, replace, run_shell_command, grep_search, glob, list_directory]
 capabilities: full
 max_turns: 50
 temperature: 0.1
-skills:
-  - website-cloning
-  - clean-code
-  - lint-and-validate
+skills: [website-cloning, clean-code, lint-and-validate]
 ---
 
 # Website Cloner

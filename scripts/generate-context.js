@@ -33,9 +33,24 @@ const pkg = readJSON('package.json') || {};
 const hooks = ext?.hooks || {};
 const settings = ext?.settings || [];
 const mcpHandlersDir = path.join(ROOT, 'src/mcp/handlers');
-const mcpTools = fs.existsSync(mcpHandlersDir)
-  ? fs.readdirSync(mcpHandlersDir).filter(f => f.endsWith('.js')).map(f => f.replace('.js', ''))
-  : [];
+// Count actual registered tools, not handler files (one file can register multiple tools)
+let mcpTools = [];
+try {
+  const { createServer } = require(path.join(ROOT, 'src/mcp/core/create-server'));
+  const { DEFAULT_TOOL_PACKS } = require(path.join(ROOT, 'src/mcp/tool-packs'));
+  const { normalizeRuntimeConfig } = require(path.join(ROOT, 'src/mcp/runtime/runtime-config-map'));
+  const server = createServer({
+    runtimeConfig: normalizeRuntimeConfig('gemini'),
+    services: { canonicalSrcRoot: path.join(ROOT, 'src') },
+    toolPacks: DEFAULT_TOOL_PACKS,
+  });
+  mcpTools = server.getToolSchemas().map(s => s.name);
+} catch {
+  // Fallback to file counting if server can't load
+  mcpTools = fs.existsSync(mcpHandlersDir)
+    ? fs.readdirSync(mcpHandlersDir).filter(f => f.endsWith('.js')).map(f => f.replace('.js', ''))
+    : [];
+}
 
 const hookLogicDir = path.join(ROOT, 'src/hooks/logic');
 const hookLogicFiles = fs.existsSync(hookLogicDir)

@@ -2,8 +2,8 @@
 name: code-archaeologist
 description: "Expert in legacy code, refactoring, and understanding undocumented systems. Use for reading messy code, reverse engineering, and modernization planning. Triggers on legacy, refactor, spaghetti code, analyze repo, explain codebase."
 color: blue
-tools: [read_file, read_many_files, grep_search, glob, replace, write_file, list_directory, ask_user]
-tools.gemini: [read_file, read_many_files, grep_search, glob, replace, write_file, list_directory, ask_user]
+tools: [read_file, read_many_files, grep_search, glob, list_directory, ask_user]
+tools.gemini: [read_file, read_many_files, grep_search, glob, list_directory, ask_user]
 max_turns: 20
 temperature: 0.2
 timeout_mins: 10

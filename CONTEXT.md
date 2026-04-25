@@ -1,6 +1,6 @@
 # gem-swarm Context
 
-> Auto-generated from codebase on 2026-04-22 17:00:59 UTC
+> Auto-generated from codebase on 2026-04-25 12:36:05 UTC
 > Regenerate: `node scripts/generate-context.js`
 
 ---
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Agents | 20 |
-| Skills | 55 |
-| MCP Tools | 8 |
+| Skills | 56 |
+| MCP Tools | 12 |
 | Hook Events | 5 |
 | Settings | 8 |
 | JS Files (src/) | 77 |
@@ -75,14 +75,18 @@ Then:
 
 ### Current MCP Tools
 
-- `assess-task-complexity`
-- `get-agent`
-- `get-runtime-context`
-- `get-skill-content`
-- `initialize-workspace`
-- `resolve-settings`
-- `session-state-tools`
-- `validate-plan`
+- `initialize_workspace`
+- `assess_task_complexity`
+- `validate_plan`
+- `resolve_settings`
+- `create_session`
+- `get_session_status`
+- `update_session`
+- `transition_phase`
+- `archive_session`
+- `get_skill_content`
+- `get_agent`
+- `get_runtime_context`
 
 ## How to Add an Agent
 

@@ -46,6 +46,10 @@ function buildAgentRegistry() {
       tools = cleaned.split(',').map(t => t.trim()).filter(Boolean);
     }
 
+    if (tools.length === 0) {
+      console.error(`ERROR: ${name} has 0 tools — check frontmatter for 'tools' or 'tools.gemini'`);
+      process.exit(1);
+    }
     registry.push({ name, capabilities, tools });
   }
 
@@ -116,6 +120,30 @@ function scanSkillDir(dir, prefix, registry) {
   }
 }
 
+// ─── Build Hook Registry ─────────────────────────────────────────────
+function buildHookRegistry() {
+  const logicDir = path.join(SRC, 'hooks', 'logic');
+  if (!fs.existsSync(logicDir)) return {};
+
+  const files = fs.readdirSync(logicDir)
+    .filter(f => f.endsWith('-logic.js'))
+    .sort();
+
+  const registry = {};
+  for (const file of files) {
+    // before-tool-logic.js → hook name "before-tool", fn "handleBeforeTool"
+    const hookName = file.replace(/-logic\.js$/, '');
+    const parts = hookName.split('-');
+    const fnName = 'handle' + parts.map(p => p[0].toUpperCase() + p.slice(1)).join('');
+    registry[hookName] = {
+      module: `hooks/logic/${file}`,
+      fn: fnName,
+    };
+  }
+
+  return registry;
+}
+
 // ─── Main ────────────────────────────────────────────────────────────
 const outDir = path.join(SRC, 'generated');
 fs.mkdirSync(outDir, { recursive: true });
@@ -136,3 +164,11 @@ fs.writeFileSync(
 const keys = Object.keys(resourceReg);
 console.log(`\nResource registry: ${keys.length} resources`);
 keys.forEach(k => console.log(`  ${k} → ${resourceReg[k]}`));
+
+const hookReg = buildHookRegistry();
+fs.writeFileSync(
+  path.join(outDir, 'hook-registry.json'),
+  JSON.stringify(hookReg, null, 2) + '\n'
+);
+console.log(`\nHook registry: ${Object.keys(hookReg).length} hooks`);
+Object.entries(hookReg).forEach(([k, v]) => console.log(`  ${k} → ${v.module} . ${v.fn}()`));

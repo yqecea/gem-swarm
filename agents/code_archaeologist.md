@@ -7,8 +7,6 @@ tools:
   - read_many_files
   - grep_search
   - glob
-  - replace
-  - write_file
   - list_directory
   - ask_user
 max_turns: 20
