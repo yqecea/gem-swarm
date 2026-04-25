@@ -31,14 +31,25 @@ for (const file of files) {
   // Convert kebab-case to snake_case for Gemini CLI
   const stubName = agentName.replace(/-/g, '_');
   
-  // Parse frontmatter
+  // Parse frontmatter (supports both inline arrays and multi-line YAML lists)
   const fm = {};
+  let lastKey = null;
   for (const line of fmMatch[1].split('\n')) {
+    // Multi-line list item: "  - value"
+    if (/^\s+-\s+/.test(line) && lastKey) {
+      const item = line.replace(/^\s+-\s+/, '').trim();
+      if (item) {
+        const existing = fm[lastKey];
+        fm[lastKey] = existing ? `${existing}, ${item}` : item;
+      }
+      continue;
+    }
     const idx = line.indexOf(':');
     if (idx === -1) continue;
     const key = line.substring(0, idx).trim();
     const val = line.substring(idx + 1).trim();
     fm[key] = val;
+    lastKey = key;
   }
 
 

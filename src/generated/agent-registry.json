@@ -280,6 +280,14 @@
   {
     "name": "website-cloner",
     "capabilities": "full",
-    "tools": []
+    "tools": [
+      "read_file",
+      "write_file",
+      "replace",
+      "run_shell_command",
+      "grep_search",
+      "glob",
+      "list_directory"
+    ]
   }
 ]

@@ -7,6 +7,11 @@ node_modules/
 # Runtime state (generated per-workspace, not committed)
 docs/gem-swarm/state/
 
+# Agent-generated artifacts (should never be in the extension repo)
+conductor/
+*-clone-tmp/
+.tasks/
+
 # OS artifacts
 .DS_Store
 Thumbs.db

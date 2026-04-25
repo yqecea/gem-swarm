@@ -18,21 +18,32 @@ function buildAgentRegistry() {
     if (!fmMatch) continue;
 
     const fm = {};
+    let lastKey = null;
     for (const line of fmMatch[1].split('\n')) {
+      if (/^\s+-\s+/.test(line) && lastKey) {
+        const item = line.replace(/^\s+-\s+/, '').trim();
+        if (item) {
+          const existing = fm[lastKey];
+          fm[lastKey] = existing ? `${existing}, ${item}` : item;
+        }
+        continue;
+      }
       const idx = line.indexOf(':');
       if (idx === -1) continue;
-      fm[line.substring(0, idx).trim()] = line.substring(idx + 1).trim();
+      const key = line.substring(0, idx).trim();
+      fm[key] = line.substring(idx + 1).trim();
+      lastKey = key;
     }
 
     const name = path.basename(file, '.md');
     const capabilities = fm.capabilities || 'read_only';
     
-    // Parse tools array
+    // Parse tools array (handles both "[a, b, c]" and "a, b, c" from multi-line)
     let tools = [];
-    const toolsStr = fm['tools.gemini'] || fm.tools || '[]';
-    const toolsMatch = toolsStr.match(/\[(.*)\]/);
-    if (toolsMatch) {
-      tools = toolsMatch[1].split(',').map(t => t.trim()).filter(Boolean);
+    const toolsStr = fm['tools.gemini'] || fm.tools || '';
+    if (toolsStr) {
+      const cleaned = toolsStr.replace(/^\[|\]$/g, '');
+      tools = cleaned.split(',').map(t => t.trim()).filter(Boolean);
     }
 
     registry.push({ name, capabilities, tools });
