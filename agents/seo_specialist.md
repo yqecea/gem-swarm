@@ -8,6 +8,7 @@ tools:
   - grep_search
   - glob
   - run_shell_command
+  - replace
   - write_file
   - list_directory
   - ask_user

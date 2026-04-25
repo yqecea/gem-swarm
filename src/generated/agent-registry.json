@@ -254,6 +254,7 @@
       "grep_search",
       "glob",
       "run_shell_command",
+      "replace",
       "write_file",
       "list_directory",
       "ask_user",
@@ -285,7 +286,8 @@
       "run_shell_command",
       "grep_search",
       "glob",
-      "list_directory"
+      "list_directory",
+      "ask_user"
     ]
   }
 ]

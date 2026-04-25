@@ -2,8 +2,8 @@
 name: seo-specialist
 description: "SEO and GEO (Generative Engine Optimization) expert. Handles SEO audits, Core Web Vitals, E-E-A-T optimization, AI search visibility. Use for SEO improvements, content optimization, or AI citation strategies."
 color: blue
-tools: [read_file, read_many_files, grep_search, glob, run_shell_command, write_file, list_directory, ask_user, google_web_search]
-tools.gemini: [read_file, read_many_files, grep_search, glob, run_shell_command, write_file, list_directory, ask_user, google_web_search]
+tools: [read_file, read_many_files, grep_search, glob, run_shell_command, replace, write_file, list_directory, ask_user, google_web_search]
+tools.gemini: [read_file, read_many_files, grep_search, glob, run_shell_command, replace, write_file, list_directory, ask_user, google_web_search]
 max_turns: 20
 temperature: 0.2
 timeout_mins: 10

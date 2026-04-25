@@ -1,4 +1,4 @@
 'use strict';
 
-process.env.MAESTRO_RUNTIME = process.env.MAESTRO_RUNTIME || 'gemini';
+process.env.GEM_SWARM_RUNTIME = process.env.GEM_SWARM_RUNTIME || 'gemini';
 require('../src/mcp/maestro-server').main();

@@ -10,6 +10,7 @@ tools:
   - grep_search
   - glob
   - list_directory
+  - ask_user
 max_turns: 50
 temperature: 0.1
 timeout_mins: 10
