@@ -109,9 +109,11 @@ Mark parallel-eligible phases with `parallel: true` and group them into executio
 
 When 70%+ of the work maps to a single agent specialization, decompose by **deliverable** — not by agent type. The orchestrator MUST auto-detect this condition and apply it without user configuration.
 
+**Ultrawork Override**: When `ultrawork: true` is set in session state, the 70% threshold drops to **40%**. Decompose by deliverable whenever 2+ independent file sets exist within a single agent's scope, regardless of what percentage of total work that agent handles. Allow up to **8 parallel instances** of the same agent (standard mode caps at 4).
+
 #### Trigger Conditions (auto-detected by planner)
 - The task is primarily one domain (e.g., "build a landing page" = all frontend)
-- The deliverables split into 2-4 independent units with non-overlapping files
+- The deliverables split into 2-4 independent units with non-overlapping files (Ultrawork: 2-8 units)
 - Each unit is self-contained enough for the agent to complete without the other units
 
 #### Decomposition Strategies

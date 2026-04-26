@@ -16,6 +16,13 @@ to the execution mode gate. Do not prompt the user. Do not resolve execution mod
 Express always dispatches sequentially. Return to the Express Workflow and continue
 from the delegation step.
 
+### Step 0.5 — Ultrawork bypass (early return)
+
+If `ultrawork` is `true` in the current session state (set by `/gem-swarm:ulw`), STOP HERE.
+Call `update_session` with `{ execution_mode: 'parallel', execution_backend: 'native', ultrawork: true }`.
+Ultrawork always dispatches parallel with `GEM_SWARM_MAX_CONCURRENT` forced to `0` (full batch dispatch, no slicing).
+Do not prompt the user. Do not analyze parallelization ratios. Skip directly to delegation.
+
 <HARD-GATE>
 This gate MUST resolve before ANY delegation proceeds. Do not skip it. Do not defer it. Do not begin delegating to subagents until execution_mode is recorded in session state. If you reach a delegation step and execution_mode is not set, STOP and return here.
 </HARD-GATE>

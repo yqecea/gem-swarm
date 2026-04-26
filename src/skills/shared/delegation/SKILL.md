@@ -14,11 +14,20 @@ Before constructing any delegation prompt, inject the shared agent base protocol
 ### Injection Steps
 1. Load `agent-base-protocol` via `get_skill_content`
 2. Load `filesystem-safety-protocol` via `get_skill_content`
-3. Prepend both protocols to the delegation prompt (base protocol first, then filesystem safety) — these appear before the task-specific content
-4. For each phase listed in the current phase's `blocked_by`, read `phases[].downstream_context` from session state and include it in the prompt
-5. If any required `downstream_context` is missing, include an explicit placeholder noting the missing dependency context (never omit silently)
+3. **Ultrawork Cascade** — If the current session has `ultrawork: true` in its state (set by the `/gem-swarm:ulw` command):
+   - Load `ultrawork` via `get_skill_content`
+   - Prepend the `[ULTRAWORK ACTIVE]` header block to the delegation prompt (after filesystem-safety-protocol, before task content):
+     ```
+     [ULTRAWORK ACTIVE]
+     Mode: Maximum Intensity
+     Gate: Build → Test → Output → Integration
+     ```
+   - The ultrawork skill content provides the behavioral enforcement rules the agent must follow
+4. Prepend all protocols to the delegation prompt (base protocol first, then filesystem safety, then ultrawork if active) — these appear before the task-specific content
+5. For each phase listed in the current phase's `blocked_by`, read `phases[].downstream_context` from session state and include it in the prompt
+6. If any required `downstream_context` is missing, include an explicit placeholder noting the missing dependency context (never omit silently)
 
-The injected protocol ensures every agent follows consistent pre-work procedures and output formatting regardless of their specialization.
+The injected protocol ensures every agent follows consistent pre-work procedures and output formatting regardless of their specialization. When Ultrawork is active, agents additionally enforce pre-implementation gates, zero-excuses completion, anti-rationalization, mandatory verification gates, and anti-AI-filler rules.
 
 ### Context Chain Construction
 
