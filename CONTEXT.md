@@ -1,6 +1,6 @@
 # gem-swarm Context
 
-> Auto-generated from codebase on 2026-04-25 13:40:54 UTC
+> Auto-generated from codebase on 2026-04-26 10:34:26 UTC
 > Regenerate: `node scripts/generate-context.js`
 
 ---
@@ -10,7 +10,7 @@
 | Metric | Value |
 |--------|-------|
 | Agents | 20 |
-| Skills | 56 |
+| Skills | 57 |
 | MCP Tools | 12 |
 | Hook Events | 5 |
 | Settings | 8 |

@@ -169,9 +169,9 @@ Use MCP state tools (`initialize_workspace`, `create_session`, `update_session`,
 | `code-review` | Standalone review methodology |
 | `validation` | Build/lint/test validation strategy |
 
-### Domain Skills (42 — loaded by agents via `get_skill_content`)
+### Domain Skills (43 — loaded by agents via `get_skill_content`)
 
-Agents declare their required skills in frontmatter. Domain skills include: `clean-code`, `frontend-design`, `mobile-design`, `vulnerability-scanner`, `red-team-tactics`, `api-patterns`, `database-design`, `testing-patterns`, `webapp-testing`, `tdd-workflow`, `performance-profiling`, `deployment-procedures`, `server-management`, `brainstorming`, `plan-writing`, `architecture`, `app-builder`, `behavioral-modes`, `parallel-agents`, `systematic-debugging`, `documentation-templates`, `code-review-checklist`, `seo-fundamentals`, `geo-fundamentals`, `i18n-localization`, `mcp-builder`, `game-development`, `nextjs-react-expert`, `tailwind-patterns`, `web-design-guidelines`, `nodejs-best-practices`, `python-patterns`, `rust-pro`, `bash-linux`, `powershell-windows`, `lint-and-validate`, `intelligent-routing`, `design-taste`, `output-guard`, `professional-design`, `redesign`, `website-cloning`.
+Agents declare their required skills in frontmatter. Domain skills include: `clean-code`, `frontend-design`, `mobile-design`, `vulnerability-scanner`, `red-team-tactics`, `api-patterns`, `database-design`, `testing-patterns`, `webapp-testing`, `tdd-workflow`, `performance-profiling`, `deployment-procedures`, `server-management`, `brainstorming`, `plan-writing`, `architecture`, `app-builder`, `behavioral-modes`, `parallel-agents`, `systematic-debugging`, `documentation-templates`, `code-review-checklist`, `seo-fundamentals`, `geo-fundamentals`, `i18n-localization`, `mcp-builder`, `game-development`, `nextjs-react-expert`, `tailwind-patterns`, `web-design-guidelines`, `nodejs-best-practices`, `python-patterns`, `rust-pro`, `bash-linux`, `powershell-windows`, `lint-and-validate`, `intelligent-routing`, `design-taste`, `output-guard`, `professional-design`, `redesign`, `website-cloning`, `ultrawork`.
 
 ## Agent Naming Convention
 

@@ -2,7 +2,7 @@
 
 Multi-agent orchestration extension for [Gemini CLI](https://github.com/google-gemini/gemini-cli).
 
-20 domain-specialist agents · 42 skills · 12 commands · parallel subagent dispatch · persistent sessions
+20 domain-specialist agents · 43 skills · 13 commands · parallel subagent dispatch · persistent sessions
 
 ---
 

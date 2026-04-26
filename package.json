@@ -1,7 +1,7 @@
 {
   "name": "gem-swarm",
   "version": "1.0.0",
-  "description": "Multi-agent orchestration extension for Gemini CLI — 20 domain specialists, 42 skills, native parallel subagents, autonomous 4-phase workflow",
+  "description": "Multi-agent orchestration extension for Gemini CLI — 20 domain specialists, 43 skills, native parallel subagents, autonomous 4-phase workflow",
   "license": "Apache-2.0",
   "scripts": {
     "generate": "node scripts/generate-stubs.js && node scripts/build-registries.js",

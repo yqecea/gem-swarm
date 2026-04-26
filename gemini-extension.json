@@ -1,7 +1,7 @@
 {
   "name": "gem-swarm",
   "version": "1.0.0",
-  "description": "Multi-agent orchestration — 20 domain specialists, 42 skills, native parallel subagents, persistent sessions, autonomous 4-phase workflow",
+  "description": "Multi-agent orchestration — 20 domain specialists, 43 skills, native parallel subagents, persistent sessions, autonomous 4-phase workflow",
   "contextFileName": "GEMINI.md",
   "settings": [
     {

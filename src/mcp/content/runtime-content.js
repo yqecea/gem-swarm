@@ -156,10 +156,12 @@ function readAgentFromFilesystem(agentName, runtimeConfig, srcRoot) {
   try {
     const content = fs.readFileSync(absolutePath, 'utf8');
     const frontmatter = parseFrontmatter(content);
+    const skills = parseInlineArray(frontmatter.skills);
     return {
       agent: {
         body: stripFrontmatter(stripFeatureBlocks(content, runtimeConfig)),
         tools: mapTools(frontmatter, runtimeConfig),
+        ...(skills.length > 0 && { skills }),
       },
     };
   } catch (err) {
