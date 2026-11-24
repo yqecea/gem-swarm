@@ -1,5 +1,5 @@
 ---
-name: design-taste-skill-pack
+name: design-taste
 description: Master router for the Taste Skill Pack. Reads the user brief, chooses the most suitable UI style, then delegates to the matching style skill plus the shared components library.
 ---
 

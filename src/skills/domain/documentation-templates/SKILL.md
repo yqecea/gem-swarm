@@ -48,8 +48,8 @@ Brief one-line description.
 
 ## Documentation
 
-- [API Reference](./docs/api.md)
-- [Architecture](./docs/architecture.md)
+- `./docs/api.md` - API Reference
+- `./docs/architecture.md` - Architecture
 
 ## License
 
